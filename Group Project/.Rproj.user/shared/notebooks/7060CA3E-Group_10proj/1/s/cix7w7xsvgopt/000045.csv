@@ -1,0 +1,6 @@
+"0",""
+"0","# Scatterplots for relationships"
+"0","ggplot(traincars, aes(x = Engine, y = Price)) +"
+"0","  geom_point(color = ""blue"") +"
+"0","  geom_smooth(method = ""lm"", color = ""red"") +"
+"0","  labs(title = ""Relationship Between Engine Capacity and Price"", x = ""Engine (CC)"", y = ""Price (Rupees)"")"

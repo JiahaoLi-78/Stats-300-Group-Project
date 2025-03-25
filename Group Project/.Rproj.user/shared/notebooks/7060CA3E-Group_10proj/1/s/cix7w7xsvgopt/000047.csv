@@ -1,0 +1,5 @@
+"0",""
+"0","ggplot(traincars, aes(x = Mileage, y = Price)) +"
+"0","  geom_point(color = ""purple"") +"
+"0","  geom_smooth(method = ""lm"", color = ""red"") +"
+"0","  labs(title = ""Relationship Between Mileage and Price"", x = ""Mileage (Km/L)"", y = ""Price (Rupees)"")"

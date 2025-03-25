@@ -1,0 +1,4 @@
+"0",""
+"0","ggplot(traincars, aes(x = Transmission, y = Price, fill = Transmission)) +"
+"0","  geom_boxplot() +"
+"0","  labs(title = ""Car Prices by Transmission Type"", x = ""Transmission Type"", y = ""Price (Rupees)"")"

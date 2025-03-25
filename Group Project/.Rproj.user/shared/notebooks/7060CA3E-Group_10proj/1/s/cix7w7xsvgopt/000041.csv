@@ -1,0 +1,5 @@
+"0",""
+"0","# Boxplots to examine relationships"
+"0","ggplot(traincars, aes(x = Fuel_Type, y = Price, fill = Fuel_Type)) +"
+"0","  geom_boxplot() +"
+"0","  labs(title = ""Car Prices by Fuel Type"", x = ""Fuel Type"", y = ""Price (Rupees)"")"

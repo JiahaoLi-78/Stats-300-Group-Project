@@ -1,0 +1,5 @@
+"0",""
+"0","# Histograms for continuous variables"
+"0","ggplot(traincars, aes(x = Price)) +"
+"0","  geom_histogram(binwidth = 50000, fill = ""blue"", color = ""black"") +"
+"0","  labs(title = ""Distribution of Car Prices"", x = ""Price (Rupees)"", y = ""Frequency"")"
