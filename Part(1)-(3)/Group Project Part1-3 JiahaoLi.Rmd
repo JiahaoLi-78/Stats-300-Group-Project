@@ -1,0 +1,99 @@
+---
+title: "Stat300 Group Project Part(1)-(3)"
+author: “Jiahao Li"
+output: html_notebook
+---
+
+## (1):
+
+We'll split the dataset into a training set (72 observations) and a testing set (18 observations). Our group number is 10, so the seed will be 30010.
+```{r}
+ucars <- read.csv("usedcars.csv")
+
+set.seed(30010)
+
+trainRec <- sort(sample(1:nrow(ucars), size = 72))
+
+testRec <- setdiff(1:nrow(ucars), trainRec)
+
+traincars <- ucars[trainRec, ]
+testcars <- ucars[testRec, ]
+```
+
+## (2):
+
+Data Exploration Plan
+
+We’ll perform:
+
+- Summary statistics  
+- Check for missing or inconsistent values  
+- Graphical exploration of relationships  
+
+---
+
+Key Points from Data
+
+- **Categorical variables:** `Fuel_Type`, `Transmission`, `Owner_Type`  
+- **Numerical variables:** `Kilometers_Driven`, `Mileage`, `Engine`, `Power`, `Seats`, `Age (2025 - Year)`  
+- **Target variable:** `Price`  
+
+We will also add an `Age` variable.
+```{r}
+# Create Age column
+traincars$Age <- 2025 - traincars$Year
+
+# Summary statistics
+summary(traincars)
+
+# Load necessary libraries
+library(ggplot2)
+
+# Histogram of Price
+ggplot(traincars, aes(x = Price)) + geom_histogram(bins = 20, fill = "skyblue") + theme_minimal()
+
+# Scatter plots for numerical features vs Price
+ggplot(traincars, aes(x = Kilometers_Driven, y = Price)) + geom_point() + theme_minimal()
+ggplot(traincars, aes(x = Mileage, y = Price)) + geom_point() + theme_minimal()
+ggplot(traincars, aes(x = Engine, y = Price)) + geom_point() + theme_minimal()
+ggplot(traincars, aes(x = Power, y = Price)) + geom_point() + theme_minimal()
+ggplot(traincars, aes(x = Age, y = Price)) + geom_point() + theme_minimal()
+
+# Boxplots for categorical features
+ggplot(traincars, aes(x = Fuel_Type, y = Price)) + geom_boxplot() + theme_minimal()
+ggplot(traincars, aes(x = Transmission, y = Price)) + geom_boxplot() + theme_minimal()
+```
+
+## (3):
+
+Modeling Approach
+
+We'll use a **multiple linear regression model**. We'll:
+
+- Check assumptions: linearity, multicollinearity, residuals  
+- Transform variables if necessary  
+- Use stepwise selection to choose best predictors  
+```{r}
+# Convert categorical variables to factors
+traincars$Fuel_Type <- as.factor(traincars$Fuel_Type)
+traincars$Transmission <- as.factor(traincars$Transmission)
+traincars$Owner_Type <- as.factor(traincars$Owner_Type)
+
+# Full model
+model_full <- lm(Price ~ Kilometers_Driven + Mileage + Engine + Power + Seats +
+                 Fuel_Type + Transmission + Owner_Type + Age, data = traincars)
+
+# Summary
+summary(model_full)
+
+# Stepwise selection
+model_step <- step(model_full, direction = "both")
+
+# Final model summary
+summary(model_step)
+
+# Diagnostic plots
+par(mfrow=c(2,2))
+plot(model_step)
+```
+
