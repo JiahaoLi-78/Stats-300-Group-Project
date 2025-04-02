@@ -31,5 +31,3 @@ print(rmse)
 ```
 
 Using our model, we created a graph to show Rohan that our model accuratly predicts the price of the used cars. Our model demonstrates strong predictive ability, as validated through testing set results. It explains **81.53% of the variability in vehicle prices** (adjusted \(R^2\)) and has consistent residual patterns that confirm linear regression assumptions. Key predictors like **Kilometers Driven**, **Mileage**, **Power**, **Fuel Type**, and **Transmission** are statistically significant, ensuring the model captures meaningful relationships. While errors (MAE = ₹312,135 and RMSE = ₹399,095) indicate some variability, these values remain reasonable given the range of vehicle prices. Visualization of actual vs. predicted prices further illustrates the model’s reliability. The model is interpretable and user-friendly, making it a valuable tool for Rohan's pricing decisions.
-
-
