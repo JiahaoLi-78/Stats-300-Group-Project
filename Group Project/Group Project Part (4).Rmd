@@ -1,0 +1,35 @@
+---
+title: "Stat300 Group Project Part (4)"
+author: “Jamie Lynch"
+output: html_notebook
+---
+
+## (4).
+
+Based on the graphs and calculated outputs, I recommend the multiple linear regression model to Rohan. 
+
+In the previous code, AIC stepwise selection was used to select the variables and model that would best accomplish the goal. Doing so yields an adjusted R^2 value of 0.8153, meaning that 81.53% of the variability in the data is explained by this model. This is a strong value that shows the model is a good fit for the data. 
+
+Furthermore, the predictors Kilometers_Driven, Mileage, Power, Fuel_TypePetrol, and TransmissionManual are all statistically significant at 95% confidence. The respective p-values are 0.04331, 0.04253, 2.37e-09, 0.00403, 4.45e-06, indicating a strong impact on the vehicle price. 
+
+Also, the residual plot and QQ-plot demonstrate that all four of the linear regression assumptions are fulfilled, confirming the use of the linear model. In the plot of the residuals, linearity can be confirmed due to the random scattering of points in no particular pattern. From the same graph, equal variance can be attributed due to the “horizontal band” about the residual line, as the points are distributed consistently. From the QQ-plot, the points tightly follow the reference line, indicating normality. Lastly, independence can be confirmed due to the fact that the sample is random.
+
+Checking the VIF values was also crucial in determining the model and regression equation to use. Running this code will give us the values:
+
+```{r}
+# Run VIF code to check for potential multicollinearity
+
+library(car)
+vif(model_step)
+```
+
+
+Since each variable has a VIF of roughly 1, with the highest being the Power variable at 2.61, multicollinearity is not much of a problem. This means that the values of the coefficients can be interpreted and it is unlikely that there is correlation between variables.
+
+The linear model is also the best because of its ability to be interpreted with relative ease by a customer such as Rohan. The regression equation and coefficients outline a clear relationship between predictors and price, and Rohan can understand how certain features will impact sales.
+
+After weighing all the aforementioned factors, it can be determined that the best model for Rohan to use is:
+
+$$\hat{Price} = KilometersDriven + Mileage + Power + Seats + FuelType + Transmission$$
+
+

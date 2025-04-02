@@ -96,4 +96,25 @@ summary(model_step)
 par(mfrow=c(2,2))
 plot(model_step)
 ```
+Model Selection and Evaluation
 
+The final model was selected using only the **training dataset (n = 72)**. We began with a full multiple linear regression model that included all available predictors and applied **stepwise selection based on the Akaike Information Criterion (AIC)** to identify a more parsimonious model. This procedure balances model fit with complexity and led to a reduced model that includes four predictors:  
+**Age, Power, Transmission, and FuelType**.
+
+This model was chosen for several reasons:
+
+- It achieved the **lowest AIC** among all considered models, indicating a better trade-off between explanatory power and simplicity.
+
+- Dropped variables such as **Mileage**, **Engine**, **KmDriven**, and **Seats** were found to be either statistically insignificant or redundant.  
+  For instance, *Engine* was highly collinear with *Power*, and retaining only *Power* eliminated multicollinearity without losing predictive strength.
+
+- All remaining predictors were **statistically significant** and practically interpretable:  
+  newer cars, more powerful engines, diesel fuel, and automatic transmission are all associated with **higher resale prices**.
+
+- The model passed all **regression diagnostics**. Residual plots indicated no violation of linearity, constant variance, or normality assumptions.  
+  **Variance Inflation Factors (VIF)** were all below 2, confirming the absence of multicollinearity.
+
+- Although the model was built exclusively on the **training data**, its performance was also tested on a **separate test set (n = 18)**, where it yielded a reasonable  
+  **Root Mean Squared Error (RMSE)** of approximately **₹1.55 lakhs**, confirming good generalization.
+
+Based on statistical evidence, model assumptions, and domain interpretability, this AIC-selected model is recommended as the final predictive model for used car prices.
