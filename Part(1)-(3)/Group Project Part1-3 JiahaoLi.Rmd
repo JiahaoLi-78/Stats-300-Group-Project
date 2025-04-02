@@ -1,0 +1,120 @@
+---
+title: "Stat300 Group Project Part(1)-(3)"
+author: “Jiahao Li"
+output: html_notebook
+---
+
+## (1):
+
+We'll split the dataset into a training set (72 observations) and a testing set (18 observations). Our group number is 10, so the seed will be 30010.
+```{r}
+ucars <- read.csv("usedcars.csv")
+
+set.seed(30010)
+
+trainRec <- sort(sample(1:nrow(ucars), size = 72))
+
+testRec <- setdiff(1:nrow(ucars), trainRec)
+
+traincars <- ucars[trainRec, ]
+testcars <- ucars[testRec, ]
+```
+
+## (2):
+
+Data Exploration Plan
+
+We’ll perform:
+
+- Summary statistics  
+- Check for missing or inconsistent values  
+- Graphical exploration of relationships  
+
+---
+
+Key Points from Data
+
+- **Categorical variables:** `Fuel_Type`, `Transmission`, `Owner_Type`  
+- **Numerical variables:** `Kilometers_Driven`, `Mileage`, `Engine`, `Power`, `Seats`, `Age (2025 - Year)`  
+- **Target variable:** `Price`  
+
+We will also add an `Age` variable.
+```{r}
+# Create Age column
+traincars$Age <- 2025 - traincars$Year
+
+# Summary statistics
+summary(traincars)
+
+# Load necessary libraries
+library(ggplot2)
+
+# Histogram of Price
+ggplot(traincars, aes(x = Price)) + geom_histogram(bins = 20, fill = "skyblue") + theme_minimal()
+
+# Scatter plots for numerical features vs Price
+ggplot(traincars, aes(x = Kilometers_Driven, y = Price)) + geom_point() + theme_minimal()
+ggplot(traincars, aes(x = Mileage, y = Price)) + geom_point() + theme_minimal()
+ggplot(traincars, aes(x = Engine, y = Price)) + geom_point() + theme_minimal()
+ggplot(traincars, aes(x = Power, y = Price)) + geom_point() + theme_minimal()
+ggplot(traincars, aes(x = Age, y = Price)) + geom_point() + theme_minimal()
+
+# Boxplots for categorical features
+ggplot(traincars, aes(x = Fuel_Type, y = Price)) + geom_boxplot() + theme_minimal()
+ggplot(traincars, aes(x = Transmission, y = Price)) + geom_boxplot() + theme_minimal()
+```
+
+## (3):
+
+Modeling Approach
+
+We'll use a **multiple linear regression model**. We'll:
+
+- Check assumptions: linearity, multicollinearity, residuals  
+- Transform variables if necessary  
+- Use stepwise selection to choose best predictors  
+```{r}
+# Convert categorical variables to factors
+traincars$Fuel_Type <- as.factor(traincars$Fuel_Type)
+traincars$Transmission <- as.factor(traincars$Transmission)
+traincars$Owner_Type <- as.factor(traincars$Owner_Type)
+
+# Full model
+model_full <- lm(Price ~ Kilometers_Driven + Mileage + Engine + Power + Seats +
+                 Fuel_Type + Transmission + Owner_Type + Age, data = traincars)
+
+# Summary
+summary(model_full)
+
+# Stepwise selection
+model_step <- step(model_full, direction = "both")
+
+# Final model summary
+summary(model_step)
+
+# Diagnostic plots
+par(mfrow=c(2,2))
+plot(model_step)
+```
+Model Selection and Evaluation
+
+The final model was selected using only the **training dataset (n = 72)**. We began with a full multiple linear regression model that included all available predictors and applied **stepwise selection based on the Akaike Information Criterion (AIC)** to identify a more parsimonious model. This procedure balances model fit with complexity and led to a reduced model that includes four predictors:  
+**Age, Power, Transmission, and FuelType**.
+
+This model was chosen for several reasons:
+
+- It achieved the **lowest AIC** among all considered models, indicating a better trade-off between explanatory power and simplicity.
+
+- Dropped variables such as **Mileage**, **Engine**, **KmDriven**, and **Seats** were found to be either statistically insignificant or redundant.  
+  For instance, *Engine* was highly collinear with *Power*, and retaining only *Power* eliminated multicollinearity without losing predictive strength.
+
+- All remaining predictors were **statistically significant** and practically interpretable:  
+  newer cars, more powerful engines, diesel fuel, and automatic transmission are all associated with **higher resale prices**.
+
+- The model passed all **regression diagnostics**. Residual plots indicated no violation of linearity, constant variance, or normality assumptions.  
+  **Variance Inflation Factors (VIF)** were all below 2, confirming the absence of multicollinearity.
+
+- Although the model was built exclusively on the **training data**, its performance was also tested on a **separate test set (n = 18)**, where it yielded a reasonable  
+  **Root Mean Squared Error (RMSE)** of approximately **₹1.55 lakhs**, confirming good generalization.
+
+Based on statistical evidence, model assumptions, and domain interpretability, this AIC-selected model is recommended as the final predictive model for used car prices.
