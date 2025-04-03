@@ -30,6 +30,6 @@ The linear model is also the best because of its ability to be interpreted with 
 
 After weighing all the aforementioned factors, it can be determined that the best model for Rohan to use is:
 
-$$\hat{Price} = KilometersDriven + Mileage + Power + Seats + FuelType + Transmission$$
+$$\hat{Price} = Age + 7.084e+03(Power) - 3.587e+05(FuelTypePetrol) - 6.384e+05(Transmission)$$
 
 
